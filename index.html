@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Укрзалізниця - Залізна Незламність</title>
+    <title>Укрзалізниця - Офіційний сайт</title>
     <style>
         :root {
             --uz-blue: #003366;
@@ -31,11 +31,10 @@
             z-index: 10000;
         }
 
-        /* Реалістичні рейки */
         .rail-scene {
             position: relative;
             width: 100%;
-            height: 120px;
+            height: 140px;
             display: flex;
             align-items: flex-end;
             padding-bottom: 20px;
@@ -43,68 +42,67 @@
 
         .rails {
             position: absolute;
-            bottom: 20px;
+            bottom: 22px;
             width: 100%;
-            height: 8px;
-            background: linear-gradient(to bottom, #777, #333);
-            border-top: 2px solid #999;
+            height: 6px;
+            background: linear-gradient(to bottom, #888, #222);
+            z-index: 2;
         }
 
         .sleepers {
             position: absolute;
-            bottom: 10px;
+            bottom: 12px;
             width: 100%;
-            height: 10px;
-            background: repeating-linear-gradient(90deg, #2c1e14, #2c1e14 30px, transparent 30px, transparent 70px);
+            height: 12px;
+            background: repeating-linear-gradient(90deg, #3d2b1f, #3d2b1f 35px, transparent 35px, transparent 75px);
+            z-index: 1;
         }
 
-        /* Реалістичний поїзд */
         .train-group {
             position: absolute;
-            bottom: 28px; /* Чітко на рейках */
-            left: -1000px;
+            bottom: 28px;
+            left: -1200px;
             display: flex;
-            gap: 5px;
-            animation: train-run 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            gap: 4px;
+            z-index: 3;
+            animation: train-run 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         .car {
-            height: 45px;
+            height: 50px;
             background: linear-gradient(to bottom, #004488, #002244);
-            border-radius: 5px 5px 2px 2px;
+            border-radius: 4px;
             position: relative;
-            border-bottom: 3px solid #111;
+            border-top: 2px solid rgba(255,255,255,0.1);
         }
 
-        .locomotive { width: 120px; border-radius: 30px 10px 2px 2px; }
-        .passenger-car { width: 100px; }
+        .locomotive { width: 140px; border-radius: 40px 10px 4px 4px; }
+        .passenger-car { width: 110px; }
 
-        /* Вікна */
+        /* Вікна поїзда */
         .car::after {
             content: '';
             position: absolute;
-            top: 10px; left: 10px; right: 10px; height: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
+            top: 12px; left: 8px; right: 8px; height: 12px;
+            background: repeating-linear-gradient(90deg, #add8e6 0%, #add8e6 15%, transparent 15%, transparent 25%);
+            opacity: 0.6;
         }
 
-        /* Колеса */
         .wheel {
             position: absolute;
-            bottom: -8px;
-            width: 12px; height: 12px;
+            bottom: -10px;
+            width: 14px; height: 14px;
             background: #111;
             border-radius: 50%;
-            border: 2px solid #444;
+            border: 2px solid #555;
         }
         .w1 { left: 15px; } .w2 { right: 15px; }
 
         @keyframes train-run {
-            0% { left: -1000px; }
+            0% { left: -1200px; }
             100% { left: 110%; }
         }
 
-        /* Контент */
         #content { opacity: 0; transition: opacity 1s ease; }
 
         .header-banner {
@@ -113,7 +111,7 @@
             background: linear-gradient(to bottom, transparent, var(--bg-deep)), 
                         url('https://i.postimg.cc/5tNpBqhk/Bez-nazvania.jpg') no-repeat center center;
             background-size: cover;
-            border-bottom: 4px solid var(--uz-yellow);
+            border-bottom: 5px solid var(--uz-yellow);
         }
 
         /* 3D Кнопки */
@@ -121,56 +119,59 @@
             display: flex;
             gap: 20px;
             justify-content: center;
-            margin: -40px auto 40px;
+            margin: -45px auto 45px;
             flex-wrap: wrap;
         }
 
         .btn-3d {
             position: relative;
-            padding: 15px 30px;
+            padding: 16px 32px;
             font-weight: 800;
             text-transform: uppercase;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 12px;
             transition: 0.1s;
             border: none;
             cursor: pointer;
-            box-shadow: 0 6px 0 var(--shadow);
-            transform: translateY(-6px);
+            box-shadow: 0 8px 0 var(--shadow);
+            transform: translateY(-8px);
+            display: inline-block;
+            min-width: 250px;
+            text-align: center;
         }
 
-        .btn-blue { --shadow: #001a33; background: var(--uz-blue); color: white; }
         .btn-yellow { --shadow: #9e8508; background: var(--uz-yellow); color: black; }
+        .btn-blue { --shadow: #001a33; background: var(--uz-blue); color: white; }
 
         .btn-3d:active {
             transform: translateY(-2px);
             box-shadow: 0 2px 0 var(--shadow);
         }
 
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
         /* Галерея */
-        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-        
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
         }
 
         .gallery-item {
-            border-radius: 15px;
+            border-radius: 18px;
             overflow: hidden;
             border: 4px solid #1a1a1a;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.6);
             cursor: pointer;
             transition: 0.4s;
         }
 
         .gallery-item:hover {
-            transform: scale(1.02);
+            transform: translateY(-8px);
             border-color: var(--uz-yellow);
         }
 
-        .gallery-item img { width: 100%; height: 250px; object-fit: cover; }
+        .gallery-item img { width: 100%; height: 260px; object-fit: cover; display: block; }
 
         /* Модалка */
         #lightbox {
@@ -184,11 +185,10 @@
             backdrop-filter: blur(10px);
         }
 
-        .lb-box { max-width: 90%; transform: scale(0.8); transition: 0.3s ease-out; }
+        .lb-box { max-width: 90%; transform: scale(0.8); transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
         #lightbox.active .lb-box { transform: scale(1); }
-        #lightbox img { width: 100%; border: 3px solid white; border-radius: 10px; }
+        #lightbox img { width: 100%; border: 4px solid var(--uz-yellow); border-radius: 12px; }
 
-        /* Сніг */
         #snow-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -206,28 +206,30 @@
             <div class="train-group">
                 <div class="car passenger-car"><div class="wheel w1"></div><div class="wheel w2"></div></div>
                 <div class="car passenger-car"><div class="wheel w1"></div><div class="wheel w2"></div></div>
+                <div class="car passenger-car"><div class="wheel w1"></div><div class="wheel w2"></div></div>
                 <div class="car locomotive"><div class="wheel w1"></div><div class="wheel w2"></div></div>
             </div>
         </div>
-        <h2 style="text-align:center; letter-spacing: 5px; color: #444;">УКРЗАЛІЗНИЦЯ</h2>
+        <h2 style="text-align:center; letter-spacing: 8px; color: #333; font-weight: 900;">УКРЗАЛІЗНИЦЯ</h2>
     </div>
 
     <canvas id="snow-canvas"></canvas>
 
     <div id="content">
         <header class="header-banner"></header>
+        
         <div class="container">
             <div class="button-container">
-                <a href="#" class="btn-3d btn-yellow">🎫 Купити квиток</a>
-                <a href="#" class="btn-3d btn-blue">👮 Особовий склад</a>
+                <a href="https://more58-ai.github.io/ukrtraine/uz-tickets/index.html" class="btn-3d btn-yellow">🎫 Купити квиток</a>
+                <a href="https://more58-ai.github.io/ukrtraine/sklad/index.html" class="btn-3d btn-blue">👮 Старший особовий склад</a>
             </div>
 
-            <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 50px;">
+            <div style="background: rgba(255,255,255,0.03); padding: 35px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 50px;">
                 <h1 style="color: var(--uz-yellow);">Залізна Стійкість</h1>
-                <p>Ми з'єднуємо міста, людей та серця. Навіть під снігом та вітром наші поїзди впевнено прямують до мети.</p>
+                <p style="font-size: 1.15rem; line-height: 1.8; color: #ccc;">Вітаємо на головній сторінці залізничної мережі. Тут ви знайдете актуальну інформацію, галерею нашого рухомого складу та зможете швидко перейти до покупки квитків або перегляду структури особового складу.</p>
             </div>
 
-            <h2 style="text-align:center; margin-bottom:30px;">НАША ГАЛЕРЕЯ</h2>
+            <h2 style="text-align:center; font-size: 2.5rem; margin-bottom:40px;">НАША ГАЛЕРЕЯ</h2>
             <div class="gallery-grid">
                 <div class="gallery-item" onclick="openLightbox('https://i.postimg.cc/KjXHD3rr/UZ-foto-1.jpg')"><img src="https://i.postimg.cc/KjXHD3rr/UZ-foto-1.jpg"></div>
                 <div class="gallery-item" onclick="openLightbox('https://i.postimg.cc/8c80mfBH/uz-foto-2.jpg')"><img src="https://i.postimg.cc/8c80mfBH/uz-foto-2.jpg"></div>
@@ -240,7 +242,9 @@
     </div>
 
     <div id="lightbox" onclick="closeLightbox()">
-        <div class="lb-box"><img id="lb-img"></div>
+        <div class="lb-box" onclick="event.stopPropagation()">
+            <img id="lb-img">
+        </div>
     </div>
 
     <script>
@@ -250,8 +254,8 @@
                 setTimeout(() => {
                     document.getElementById('loader').style.display = 'none';
                     document.getElementById('content').style.opacity = '1';
-                }, 500);
-            }, 4000);
+                }, 600);
+            }, 4500);
         };
 
         function openLightbox(src) {
@@ -291,7 +295,7 @@
                 ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
             });
             ctx.fill();
-            flakes.forEach(f => { f.y += f.v; if (f.y > height) f.y = -5; });
+            flakes.forEach(f => { f.y += f.v; if (f.y > height) f.y = -10; });
             requestAnimationFrame(drawSnow);
         }
 
