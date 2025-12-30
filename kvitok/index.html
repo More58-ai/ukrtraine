@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Замовлення квитка</title>
+  <style>
+    :root {
+      --primary-blue: #003366;
+      --accent-gold: #ffcc00;
+      --bg-dark: #001a33;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at center, #004080, #001a33);
+      color: white;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      perspective: 1000px; /* Важливо для 3D */
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--accent-gold);
+      font-size: clamp(24px, 8vw, 40px);
+      margin-bottom: 30px;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      z-index: 10;
+    }
+
+    /* 3D Ефект для форми */
+    form {
+      background: white;
+      color: var(--primary-blue);
+      padding: 30px;
+      border-radius: 25px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 
+        0 20px 50px rgba(0,0,0,0.5),
+        inset 0 -5px 10px rgba(0,0,0,0.1);
+      transform: rotateX(5deg);
+      transition: transform 0.5s ease;
+      z-index: 5;
+    }
+
+    form:hover {
+      transform: rotateX(0deg) scale(1.02);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 5px;
+      border-radius: 12px;
+      border: 2px solid #eee;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      background-color: #fff;
+    }
+
+    /* Адаптивна сітка для кнопок часу */
+    .time-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .time-options input[type="radio"] {
+      display: none;
+    }
+
+    .time-options label {
+      margin: 0;
+      padding: 10px 5px;
+      border-radius: 10px;
+      background-color: #f0f0f0;
+      color: var(--primary-blue);
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .time-options input[type="radio"]:checked + label {
+      background-color: var(--primary-blue);
+      color: var(--accent-gold);
+      border-color: var(--accent-gold);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+
+    .btn-submit {
+      width: 100%;
+      margin-top: 30px;
+      padding: 18px;
+      background: linear-gradient(135deg, #ffcc00, #ffaa00);
+      color: var(--primary-blue);
+      border: none;
+      border-radius: 15px;
+      font-weight: 800;
+      font-size: 18px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(255, 204, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    /* Модальне вікно (Квиток) */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #fff;
+      color: #333;
+      padding: 25px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      animation: ticketPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes ticketPop {
+      from { transform: scale(0.5) rotateY(90deg); opacity: 0; }
+      to { transform: scale(1) rotateY(0deg); opacity: 1; }
+    }
+
+    .ticket-header {
+      border-bottom: 2px dashed #ccc;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .ticket-detail p {
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+
+    .ticket-detail strong {
+      color: var(--primary-blue);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    /* Мобільна адаптація */
+    @media (max-width: 480px) {
+      body { padding: 15px; }
+      form { padding: 20px; border-radius: 15px; }
+      .time-options { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Укрзалізниця</h1>
+
+  <form id="ticketForm">
+    <label for="fullName">Пасажир</label>
+    <input type="text" id="fullName" placeholder="Прізвище та ім'я" required>
+
+    <label for="route">Напрямок</label>
+    <select id="route" required>
+      <option value="">Оберіть рейс</option>
+      <option value="Харків-Дніпро">Харків — Дніпро</option>
+      <option value="Дніпро-Київ">Дніпро — Київ</option>
+      <option value="Київ-Дніпро">Київ — Дніпро</option>
+    </select>
+
+    <div style="display: flex; gap: 15px;">
+      <div style="flex: 1;">
+        <label for="wagon">Вагон</label>
+        <select id="wagon" required>
+          <option value="Плацкарт">Плацкарт</option>
+          <option value="Купе">Купе</option>
+          <option value="Люкс">Люкс</option>
+        </select>
+      </div>
+      <div style="flex: 1;">
+        <label for="date">Дата</label>
+        <input type="date" id="date" required>
+      </div>
+    </div>
+
+    <label>Час відправлення</label>
+    <div class="time-options">
+      <input type="radio" id="t10" name="time" value="10:00" checked><label for="t10">10:00</label>
+      <input type="radio" id="t12" name="time" value="12:00"><label for="t12">12:00</label>
+      <input type="radio" id="t14" name="time" value="14:00"><label for="t14">14:00</label>
+      <input type="radio" id="t18" name="time" value="18:00"><label for="t18">18:00</label>
+      <input type="radio" id="t20" name="time" value="20:00"><label for="t20">20:00</label>
+      <input type="radio" id="t22" name="time" value="22:00"><label for="t22">22:00</label>
+    </div>
+
+    <button type="submit" class="btn-submit">Оформити квиток</button>
+  </form>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeBtn">&times;</span>
+      <div class="ticket-header">
+        <img src="https://i.postimg.cc/qvzdTCVk/image.jpg" alt="UZ" style="width: 80px;">
+        <h2 style="margin-top:10px">Електронний квиток</h2>
+      </div>
+      <div class="ticket-detail" id="ticketDetails"></div>
+      <div style="text-align: center; margin-top: 20px;">
+        <img src="https://i.postimg.cc/cLrLv6hk/UZ-Qr.png" alt="QR" style="width: 120px;">
+        <p style="font-size: 10px; color: #888; margin-top: 5px;">Пред'явіть QR-код провіднику</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("ticketForm");
+    const modal = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeBtn");
+    const details = document.getElementById("ticketDetails");
+
+    form.onsubmit = function(e) {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById("fullName").value,
+        route: document.getElementById("route").value,
+        wagon: document.getElementById("wagon").value,
+        date: document.getElementById("date").value,
+        time: form.time.value
+      };
+
+      details.innerHTML = `
+        <p><strong>Пасажир:</strong> <span>${data.name}</span></p>
+        <p><strong>Маршрут:</strong> <span>${data.route}</span></p>
+        <p><strong>Тип вагона:</strong> <span>${data.wagon}</span></p>
+        <p><strong>Дата:</strong> <span>${data.date}</span></p>
+        <p><strong>Час:</strong> <span>${data.time}</span></p>
+      `;
+      
+      modal.style.display = "flex";
+
+      // Надсилання в Google Forms
+      fetch("https://docs.google.com/forms/d/e/1FAIpQLSevFSc8Y5sETlKhEaskaD2arXTh2CNtLPgC_B6nPYoCIeJ9Rw/formResponse", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          "entry.2075413536": data.name,
+          "entry.1604184528": data.route,
+          "entry.68393015": data.wagon,
+          "entry.1417742067": data.date,
+          "entry.1571517416": data.time
+        })
+      });
+    };
+
+    closeBtn.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+  </script>
+</body>
+</html>
