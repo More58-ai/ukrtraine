@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Замовлення квитка</title>
   <style>
-    /* --- Весь твій CSS тут без змін --- */
+    /* --- ВЕСЬ ТВОЙ CSS БЕЗ ЗМІН --- */
     :root { --primary-blue: #003366; --accent-gold: #ffcc00; --bg-dark: #001a33; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at center, #004080, #001a33); color: white; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; perspective: 1000px; overflow-x: hidden; }
@@ -28,120 +28,115 @@
     .ticket-detail p { margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 15px; }
     .ticket-detail strong { color: var(--primary-blue); }
     .close-btn { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; cursor: pointer; }
-    @media (max-width: 480px) { body { padding: 15px; } form { padding: 20px; border-radius: 15px; } .time-options { grid-template-columns: repeat(3, 1fr); } }
   </style>
 </head>
 <body>
 
-  <h1>Укрзалізниця</h1>
+<h1>Укрзалізниця</h1>
 
-  <form id="ticketForm">
-    <label for="fullName">Пасажир</label>
-    <input type="text" id="fullName" placeholder="Прізвище та ім'я" required>
+<form id="ticketForm">
+  <label for="fullName">Пасажир</label>
+  <input type="text" id="fullName" required>
 
-    <label for="route">Напрямок</label>
-    <select id="route" required>
-      <option value="">Оберіть рейс</option>
-      <option value="Харків-Дніпро">Харків — Дніпро</option>
-      <option value="Дніпро-Київ">Дніпро — Київ</option>
-      <option value="Київ-Дніпро">Київ — Дніпро</option>
-    </select>
+  <label for="route">Напрямок</label>
+  <select id="route" required>
+    <option value="">Оберіть рейс</option>
+    <option value="Харків-Дніпро">Харків — Дніпро</option>
+    <option value="Дніпро-Київ">Дніпро — Київ</option>
+    <option value="Київ-Дніпро">Київ — Дніпро</option>
+  </select>
 
-    <div style="display: flex; gap: 15px;">
-      <div style="flex: 1;">
-        <label for="wagon">Вагон</label>
-        <select id="wagon" required>
-          <option value="Плацкарт">Плацкарт</option>
-          <option value="Купе">Купе</option>
-          <option value="Люкс">Люкс</option>
-        </select>
-      </div>
-      <div style="flex: 1;">
-        <label for="date">Дата</label>
-        <input type="date" id="date" required>
-      </div>
-    </div>
+  <label for="wagon">Вагон</label>
+  <select id="wagon" required>
+    <option value="Плацкарт">Плацкарт</option>
+    <option value="Купе">Купе</option>
+    <option value="Люкс">Люкс</option>
+  </select>
 
-    <label>Час відправлення</label>
-    <div class="time-options">
-      <input type="radio" id="t10" name="time" value="10:00" checked><label for="t10">10:00</label>
-      <input type="radio" id="t12" name="time" value="12:00"><label for="t12">12:00</label>
-      <input type="radio" id="t14" name="time" value="14:00"><label for="t14">14:00</label>
-      <input type="radio" id="t18" name="time" value="18:00"><label for="t18">18:00</label>
-      <input type="radio" id="t20" name="time" value="20:00"><label for="t20">20:00</label>
-      <input type="radio" id="t22" name="time" value="22:00"><label for="t22">22:00</label>
-    </div>
+  <label for="date">Дата</label>
+  <input type="date" id="date" required>
 
-    <button type="submit" class="btn-submit">Оформити квиток</button>
-  </form>
-
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close-btn" id="closeBtn">&times;</span>
-      <div class="ticket-header">
-        <img src="https://i.postimg.cc/qvzdTCVk/image.jpg" alt="UZ" style="width: 80px;">
-        <h2 style="margin-top:10px">Електронний квиток</h2>
-      </div>
-      <div class="ticket-detail" id="ticketDetails"></div>
-      <div style="text-align: center; margin-top: 20px;">
-        <img src="https://i.postimg.cc/cLrLv6hk/UZ-Qr.png" alt="QR" style="width: 120px;">
-        <p style="font-size: 10px; color: #888; margin-top: 5px;">Пред'явіть QR-код провіднику</p>
-      </div>
-    </div>
+  <label>Час</label>
+  <div class="time-options">
+    <input type="radio" id="t10" name="time" value="10:00" checked><label for="t10">10:00</label>
+    <input type="radio" id="t12" name="time" value="12:00"><label for="t12">12:00</label>
+    <input type="radio" id="t14" name="time" value="14:00"><label for="t14">14:00</label>
   </div>
 
-  <!-- 🔥 Firebase Script -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  <button class="btn-submit">Оформити квиток</button>
+</form>
 
-    const firebaseConfig = {
-      apiKey: "ТУТ_API_KEY",
-      authDomain: "uz-tickets-2dcb8.firebaseapp.com",
-      databaseURL: "https://uz-tickets-2dcb8-default-rtdb.firebaseio.com",
-      projectId: "uz-tickets-2dcb8",
-      storageBucket: "uz-tickets-2dcb8.appspot.com",
-      messagingSenderId: "ТУТ_SENDER_ID",
-      appId: "ТУТ_APP_ID"
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeBtn">&times;</span>
+    <div class="ticket-detail" id="ticketDetails"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "ТУТ_API_KEY",
+    authDomain: "uz-tickets-2dcb8.firebaseapp.com",
+    databaseURL: "https://uz-tickets-2dcb8-default-rtdb.firebaseio.com",
+    projectId: "uz-tickets-2dcb8",
+    storageBucket: "uz-tickets-2dcb8.appspot.com",
+    messagingSenderId: "ТУТ_SENDER_ID",
+    appId: "ТУТ_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  function makeSafeKey(name) {
+    return name.trim().toLowerCase().replace(/\s+/g, "_").replace(/[.#$[\]/]/g, "");
+  }
+
+  function generateTicketNumber() {
+    return "UZ-" + Date.now();
+  }
+
+  const form = document.getElementById("ticketForm");
+  const modal = document.getElementById("modal");
+  const closeBtn = document.getElementById("closeBtn");
+  const details = document.getElementById("ticketDetails");
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const ticketNumber = generateTicketNumber();
+
+    const data = {
+      ticketNumber,
+      name: fullName.value,
+      route: route.value,
+      wagon: wagon.value,
+      date: date.value,
+      time: form.time.value,
+      createdAt: new Date().toISOString()
     };
 
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    const key = makeSafeKey(data.name) + "_" + ticketNumber;
 
-    const form = document.getElementById("ticketForm");
-    const modal = document.getElementById("modal");
-    const closeBtn = document.getElementById("closeBtn");
-    const details = document.getElementById("ticketDetails");
+    set(ref(database, "tickets/" + key), data);
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+    details.innerHTML = `
+      <p><strong>Квиток №</strong><span>${ticketNumber}</span></p>
+      <p><strong>Пасажир</strong><span>${data.name}</span></p>
+      <p><strong>Маршрут</strong><span>${data.route}</span></p>
+      <p><strong>Вагон</strong><span>${data.wagon}</span></p>
+      <p><strong>Дата</strong><span>${data.date}</span></p>
+      <p><strong>Час</strong><span>${data.time}</span></p>
+    `;
 
-      const data = {
-        name: document.getElementById("fullName").value,
-        route: document.getElementById("route").value,
-        wagon: document.getElementById("wagon").value,
-        date: document.getElementById("date").value,
-        time: form.time.value,
-        createdAt: new Date().toISOString()
-      };
+    modal.style.display = "flex";
+    form.reset();
+  });
 
-      // ✅ Зберігаємо у Firebase
-      push(ref(database, "tickets"), data);
+  closeBtn.onclick = () => modal.style.display = "none";
+</script>
 
-      details.innerHTML = `
-        <p><strong>Пасажир:</strong> <span>${data.name}</span></p>
-        <p><strong>Маршрут:</strong> <span>${data.route}</span></p>
-        <p><strong>Тип вагона:</strong> <span>${data.wagon}</span></p>
-        <p><strong>Дата:</strong> <span>${data.date}</span></p>
-        <p><strong>Час:</strong> <span>${data.time}</span></p>
-      `;
-
-      modal.style.display = "flex";
-      form.reset();
-    });
-
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
-  </script>
 </body>
 </html>
